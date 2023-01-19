@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./src/app.js",
-    "start:db": "docker-compose up -f ./docker/postgres.yml -d"
+    "start:db": "docker compose -f ./docker/postgres.yml up -d"
   },
   "dependencies": {
     "express": "~4.16.1"
