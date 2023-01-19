@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./src/app.js"
+    "start": "node ./src/app.js",
+    "start:db": "docker-compose up -f ./docker/postgres.yml -d"
   },
   "dependencies": {
     "express": "~4.16.1"
