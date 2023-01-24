@@ -1,32 +1,41 @@
-const { Sequelize } = require('sequelize');
 const express = require('express')
 const app = express()
 const port = 3000;
-const { createDatabase } = require('./database/createDb');
+const { createTables, createRows, fetchBrands } = require('./database/pg');
 
 // Top level await
 (async () => {
-  createDatabase();
-  await testDatabase();
+  // await createDatabase();
 })();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.get('/', async (req, res) => {
+  await createTables();
+  await createRows();
+  const response = await fetchBrands();
+
+  let listItems = ['no data']
+  if (response?.rows) {
+    listItems = response.rows.map(ele => {
+      return `<li>${ele.name}</li>`
+    })
+    // Removes commas
+    listItems = listItems.join('')
+  }
+
+  res.send(`
+    <html>
+      <head>
+      </head>
+      <body>
+        <h1>Brands</h1>
+        <ul>
+        ${listItems}
+        </ul>
+      </body>
+    </html>
+  `)
 })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
-
-async function testDatabase() {
-  const sequelize = new Sequelize('postgres://postgres:supersecretpassword@localhost:5432/fsa') // Example for postgres
-
-  // Test authentication
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-
-}
