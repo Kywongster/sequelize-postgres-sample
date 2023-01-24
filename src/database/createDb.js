@@ -1,6 +1,6 @@
 const { Client } = require("pg");
 
-export default function createDatabase() {
+function createDatabase() {
   const client = new Client({
     user: "postgres",
     password: "supersecretpassword",
@@ -14,4 +14,8 @@ export default function createDatabase() {
     console.log(err, res);
     client.end();
   });
+}
+
+module.exports = {
+  createDatabase
 }
