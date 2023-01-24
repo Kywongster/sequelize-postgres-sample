@@ -7,6 +7,15 @@
     "start:db": "docker compose -f ./docker/postgres.yml up -d"
   },
   "dependencies": {
-    "express": "~4.16.1"
+    "express": "~4.16.1",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.28.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
   }
 }
