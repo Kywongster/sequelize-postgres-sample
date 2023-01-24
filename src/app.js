@@ -3,11 +3,6 @@ const app = express()
 const port = 3000;
 const { createTables, createRows, fetchBrands } = require('./database/pg');
 
-// Top level await
-(async () => {
-  // await createDatabase();
-})();
-
 app.get('/', async (req, res) => {
   await createTables();
   await createRows();

@@ -17,7 +17,7 @@ async function createDatabase() {
     client.connect();
 
     const sql = `
-    CREATE DATABASE "fsa"
+    CREATE DATABASE "fsa";
     `
 
     await client.query(sql);
