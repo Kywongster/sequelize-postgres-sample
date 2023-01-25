@@ -1,34 +1,131 @@
 const express = require('express')
 const app = express()
 const port = 3000;
-const { createTables, createRows, fetchBrands } = require('./database/pg');
+const { createTables, createRows, getBrands, getSneakersByBrandId, createBrand, getLargestBrandId } = require('./database/pg');
 
+// Tell express where our static assets live
+app.use(express.static('assets'))
+
+// Body parser middleware
+app.use(express.urlencoded({ extended: false }))
+
+// GET Routes
 app.get('/', async (req, res) => {
   await createTables();
   await createRows();
-  const response = await fetchBrands();
+  const brands = await getBrands();
 
-  let listItems = ['no data']
-  if (response?.rows) {
-    listItems = response.rows.map(ele => {
+  let listItems
+  if (brands?.rows?.length > 0) {
+    listItems = brands.rows.map(ele => {
       return `<li>${ele.name}</li>`
     })
     // Removes commas
     listItems = listItems.join('')
+  } else {
+    listItems = 'No Brands Available'
   }
 
   res.send(`
     <html>
       <head>
+        <link rel='stylesheet' href='/styles.css' />
       </head>
       <body>
-        <h1>Brands</h1>
+        <h1>My Sneaker Shop</h1>
+        <h2>Select a destination</h2>
         <ul>
-        ${listItems}
+          <li><a href="/">Home</a></li>
+          <li><a href="/brands">Brands (${brands?.rows?.length})</a></li>
         </ul>
       </body>
     </html>
   `)
+})
+
+app.get('/brands', async (req, res) => {
+  await createTables();
+  await createRows();
+  const brands = await getBrands();
+
+  let listItems
+  if (brands?.rows?.length) {
+    listItems = brands.rows.map(ele => {
+      return `<li><a href='/brands/${ele.id}'>${ele.name}</a></li>`
+    })
+    // Removes commas
+    listItems = listItems.join('')
+  } else {
+    listItems = 'No Brands Available'
+  }
+
+  res.send(`
+    <html>
+      <head>
+        <link rel="stylesheet" type="text/css" href="/styles.css" />
+      </head>
+      <body>
+        <h1>My Sneaker Shop</h1>
+        <h2>Select a destination</h2>
+        <ul> 
+          <li><a href="/">Home</a></li>
+          <li><a href="/brands">Brands (${brands?.rows?.length})</a></li>
+        </ul>
+        <h3>Brands</h3>
+        <ul>
+          ${listItems}
+        </ul>
+        <form action="/brands" method="POST">
+          <input type="text" name="name" placeholder="Brand Name" />
+          <button type="submit">Add Brand</button>
+        </form>
+      </body>
+    </html>
+  `)
+})
+
+app.get('/brands/:id', async (req, res) => {
+  const brands = await getBrands();
+  const sneakers = await getSneakersByBrandId(req.params.id)
+  let sneakerList
+  if (sneakers?.rows?.length > 0) {
+    sneakerList = sneakers.rows.map(ele => {
+      return `<li>${ele.name}</li>`
+    })
+    // Removes commas
+    sneakerList = sneakerList.join('')
+  } else {
+    sneakerList = 'No Sneakers Available'
+  }
+
+  res.send(`
+    <html>
+      <head>
+        <link rel="stylesheet" type="text/css" href="/styles.css" />
+      </head>
+      <body>
+        <h1>My Sneaker Shop</h1>
+        <h2>Select a destination</h2>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/brands">Brands (${brands?.rows?.length})</a></li>
+        </ul>
+        <h3>Brand ID: ${req.params.id}</h3>
+        <ul>
+          ${sneakerList}
+        </ul>
+      </body>
+    </html>
+  `)
+})
+
+// POST Routes
+app.post('/brands', async (req, res) => {
+  const { name } = req.body;
+  const result = await getLargestBrandId();
+  const largestBrandId = result.rows[0].max;
+  await createBrand(name, largestBrandId + 1);
+  res.redirect('/brands');
 })
 
 app.listen(port, () => {

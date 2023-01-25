@@ -58,7 +58,8 @@ async function createRows() {
   INSERT INTO "Brands"(id, name) VALUES(1, 'Nike');
   INSERT INTO "Brands"(id, name) VALUES(2, 'Adidas');
   INSERT INTO "Brands"(id, name) VALUES(3, 'Converse');
-  INSERT INTO "Sneakers"(id, name, brand_id) VALUES(1, 'Air Max Jordan', 1)
+  INSERT INTO "Sneakers"(id, name, brand_id) VALUES(1, 'Air Max', 1);
+  INSERT INTO "Sneakers"(id, name, brand_id) VALUES(2, 'Dunk Low Kentucky', 1);
   `
   const client = createClient();
   try {
@@ -71,7 +72,24 @@ async function createRows() {
   }
 }
 
-async function fetchBrands() {
+// CRUD Brand Functions
+
+async function createBrand(name, id) {
+  const sql = `
+  INSERT INTO "Brands"(id, name) VALUES(${id}, '${name}');
+  `
+  const client = createClient();
+  try {
+    await client.connect()
+    const response = await client.query(sql);
+    await client.end();
+    return response;
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function getBrands() {
   const sql = `
   SELECT * FROM "Brands";
   `
@@ -86,9 +104,78 @@ async function fetchBrands() {
   }
 }
 
+async function updateBrand(id, name) {
+  const sql = `
+  UPDATE "Brands" SET name='${name}' WHERE id=${id};
+  `
+  const client = createClient();
+  try {
+    await client.connect()
+    const response = await client.query(sql);
+    await client.end();
+    return response;
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+// Helpful Brand Functions
+async function getLargestBrandId() {
+  const sql = `
+  SELECT MAX(id) FROM "Brands";
+  `
+  const client = createClient();
+  try {
+    await client.connect()
+    const response = await client.query(sql);
+    await client.end();
+    return response;
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+// CRUD Sneaker Functions
+
+async function getSneakersByBrandId(brandId) {
+  const sql = `
+  SELECT * FROM "Sneakers" WHERE brand_id=${brandId};
+  `
+  const client = createClient();
+  try {
+    await client.connect()
+    const response = await client.query(sql);
+    await client.end();
+    return response;
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function deleteSneaker(sneakerId) {
+  const sql = `
+  DELETE FROM "Sneakers" WHERE id=${sneakerId};
+  `
+  const client = createClient();
+  try {
+    await client.connect()
+    const response = await client.query(sql);
+    await client.end();
+    return response;
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+
 module.exports = {
   createDatabase,
   createTables,
   createRows,
-  fetchBrands
+  getBrands,
+  createBrand,
+  updateBrand,
+  getLargestBrandId,
+  deleteSneaker,
+  getSneakersByBrandId
 }
