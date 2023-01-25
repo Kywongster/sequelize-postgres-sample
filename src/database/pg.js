@@ -12,6 +12,18 @@ function createClient() {
 // postgres://username:pass@hostname:portnumber
 // http://
 
+async function runQuery(sql) {
+  const client = createClient();
+  try {
+    await client.connect()
+    const response = await client.query(sql);
+    await client.end();
+    return response;
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 async function createDatabase() {
   const client = createClient();
 
@@ -81,15 +93,7 @@ async function createBrand(name, id) {
   const sql = `
   INSERT INTO "Brands"(id, name) VALUES(${id}, '${name}');
   `
-  const client = createClient();
-  try {
-    await client.connect()
-    const response = await client.query(sql);
-    await client.end();
-    return response;
-  } catch (err) {
-    console.error(err)
-  }
+  return await runQuery(sql);
 }
 
 async function getBrands() {

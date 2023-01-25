@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: false }))
 // GET Routes
 app.get('/', async (req, res) => {
   // The next two lines are only required the first time the app is ran.
-  await createTables();
-  await createRows();
+  // await createTables();
+  // await createRows();
   const brands = await getBrands();
 
   res.send(`
@@ -64,7 +64,7 @@ app.get('/brands', async (req, res) => {
           ${listItems}
         </ul>
         <form action="/brands" method="POST">
-          <input type="text" name="name" placeholder="Brand Name" />
+          <input type="text" name="brandName" placeholder="Brand Name" />
           <button type="submit">Add Brand</button>
         </form>
       </body>
@@ -73,6 +73,10 @@ app.get('/brands', async (req, res) => {
 })
 
 app.get('/brands/:brandId', async (req, res) => {
+  console.log('req', req)
+  // user agent
+  // req.rawHeaders[6]
+  // console.log('req.rawHeaders[9]', req.rawHeaders[9])
   const brands = await getBrands();
   const sneakers = await getSneakersByBrandId(req.params.brandId)
   let sneakerList
@@ -109,10 +113,10 @@ app.get('/brands/:brandId', async (req, res) => {
 
 // POST Routes
 app.post('/brands', async (req, res) => {
-  const { name } = req.body;
+  const { brandName } = req.body;
   const result = await getLargestBrandId();
   const largestBrandId = result.rows[0].max;
-  await createBrand(name, largestBrandId + 1);
+  await createBrand(brandName, largestBrandId + 1);
   res.redirect('/brands');
 })
 
