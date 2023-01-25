@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: false }))
 
 // GET Routes
 app.get('/', async (req, res) => {
+  // The next two lines are only required the first time the app is ran.
   await createTables();
   await createRows();
   const brands = await getBrands();
@@ -33,8 +34,6 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/brands', async (req, res) => {
-  await createTables();
-  await createRows();
   const brands = await getBrands();
 
   let listItems
