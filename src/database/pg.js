@@ -5,10 +5,12 @@ function createClient() {
     user: "postgres",
     password: "supersecretpassword",
     host: "localhost",
-    database: "fsa",
+    database: "academy",
   });
   return client
 }
+// postgres://username:pass@hostname:portnumber
+// http://
 
 async function createDatabase() {
   const client = createClient();
@@ -30,9 +32,9 @@ async function createDatabase() {
 
 async function createTables() {
   const sql = `
-  CREATE TABLE IF NOT EXISTS "Brands"(
+  CREATE TABLE "Brands"(
     id INTEGER PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100)
   );
   CREATE TABLE IF NOT EXISTS "Sneakers"(
     id INTEGER PRIMARY KEY,
@@ -60,6 +62,7 @@ async function createRows() {
   INSERT INTO "Brands"(id, name) VALUES(3, 'Converse');
   INSERT INTO "Sneakers"(id, name, brand_id) VALUES(1, 'Air Max', 1);
   INSERT INTO "Sneakers"(id, name, brand_id) VALUES(2, 'Dunk Low Kentucky', 1);
+  INSERT INTO "Sneakers"(id, name, brand_id) VALUES(3, 'Jordans', 1);
   `
   const client = createClient();
   try {

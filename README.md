@@ -2,6 +2,8 @@
 
 ## Pre-requisites
 
+> If you have Postgres installed by other means, you can skip this section. You do not need Docker.
+
 -   [Install Docker](https://docs.docker.com/get-docker/)
 
 ## Tech Stack
@@ -29,10 +31,16 @@
 
 -   If using Docker, start the container with `npm run start:db`
 
+-   Connect to the Postgres container
+
+```bash
+psql -U postgres
+```
+
 -   Create a database
 
 ```sql
-CREATE DATABASE "fsa";
+CREATE DATABASE "academy";
 ```
 
 > Do not forget the semicolon at the end of the statement!!

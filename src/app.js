@@ -15,17 +15,6 @@ app.get('/', async (req, res) => {
   await createRows();
   const brands = await getBrands();
 
-  let listItems
-  if (brands?.rows?.length > 0) {
-    listItems = brands.rows.map(ele => {
-      return `<li>${ele.name}</li>`
-    })
-    // Removes commas
-    listItems = listItems.join('')
-  } else {
-    listItems = 'No Brands Available'
-  }
-
   res.send(`
     <html>
       <head>
@@ -84,9 +73,9 @@ app.get('/brands', async (req, res) => {
   `)
 })
 
-app.get('/brands/:id', async (req, res) => {
+app.get('/brands/:brandId', async (req, res) => {
   const brands = await getBrands();
-  const sneakers = await getSneakersByBrandId(req.params.id)
+  const sneakers = await getSneakersByBrandId(req.params.brandId)
   let sneakerList
   if (sneakers?.rows?.length > 0) {
     sneakerList = sneakers.rows.map(ele => {
@@ -110,7 +99,7 @@ app.get('/brands/:id', async (req, res) => {
           <li><a href="/">Home</a></li>
           <li><a href="/brands">Brands (${brands?.rows?.length})</a></li>
         </ul>
-        <h3>Brand ID: ${req.params.id}</h3>
+        <h3>Brand ID: ${req.params.brandId}</h3>
         <ul>
           ${sneakerList}
         </ul>
