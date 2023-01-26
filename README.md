@@ -1,5 +1,8 @@
 # Postgres + Express Sample App
 
+![updated-sequelize-client-server-model](https://user-images.githubusercontent.com/119979671/214934519-5432ac65-a12e-447c-b01d-1be9dc0c3a7e.png)
+
+
 ![client-server-model](https://user-images.githubusercontent.com/119979671/214760820-ced2d4a6-edfe-42f7-904c-f1d87ac57e97.png)
 
 ## Pre-requisites
