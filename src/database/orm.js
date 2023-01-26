@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+// postgres://username:password@localhost:5432/database_name
 const db = new Sequelize('postgres://postgres:supersecretpassword@localhost:5432/sequelize')
 
 // Database Models
@@ -63,9 +64,9 @@ Brands.beforeCreate((brand) => {
 // Database Functions
 
 async function syncAndSeed() {
-  // Create Models
+  // Create Models (Tables)
   await db.sync({ force: true })
-  // Create Instances
+  // Create Instances (Rows)
   await Brands.create({ id: 1, name: 'Nike' })
   await Brands.create({ id: 2, name: 'Adidas' })
   await Brands.create({ id: 3, name: 'Converse' })

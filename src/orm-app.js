@@ -37,10 +37,11 @@ app.get('/', async (req, res) => {
 
 app.get('/brands', async (req, res) => {
   const brands = await getBrands();
+  console.log('brands', brands)
 
   let listItems
-  if (brands?.rows?.length) {
-    listItems = brands.rows.map(ele => {
+  if (brands?.length) {
+    listItems = brands.map(ele => {
       return `<li><a href='/brands/${ele.id}'>${ele.name}</a></li>`
     })
     // Removes commas
@@ -59,7 +60,7 @@ app.get('/brands', async (req, res) => {
         <h2>Select a destination</h2>
         <ul> 
           <li><a href="/">Home</a></li>
-          <li><a href="/brands">Brands (${brands?.rows?.length})</a></li>
+          <li><a href="/brands">Brands (${brands?.length})</a></li>
         </ul>
         <h3>Brands</h3>
         <ul>
