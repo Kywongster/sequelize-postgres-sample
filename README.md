@@ -1,5 +1,7 @@
 # Postgres + Express Sample App
 
+![client-server-model](https://user-images.githubusercontent.com/119979671/214760820-ced2d4a6-edfe-42f7-904c-f1d87ac57e97.png)
+
 ## Pre-requisites
 
 > If you have Postgres installed by other means, you can skip this section. You do not need Docker.
