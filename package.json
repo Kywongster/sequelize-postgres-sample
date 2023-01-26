@@ -5,6 +5,7 @@
     "scripts": {
         "start": "node ./src/app.js",
         "start:watch": "nodemon ./src/app.js",
+        "start:sequelize": "nodemon ./src/orm-app.js",
         "start:db": "docker compose -f ./docker/postgres.yml up -d"
     },
     "dependencies": {
